@@ -15,22 +15,20 @@ class GroceryNotifier extends StateNotifier<List<GroceryItemModel>> {
     state = [...state, groceryItemModel];
   }
 
-  void removeGrocery(GroceryItemModel groceryItemModel) {
-    state =
-        state.where((grocery) => grocery.id != groceryItemModel.id).toList();
-  }
+  void removeGrocery(GroceryItemModel groceryItemModel) {}
 
   void deleteData(GroceryItemModel groceryItemModel) async {
+    final index = state.indexOf(groceryItemModel);
+    state =
+        state.where((grocery) => grocery.id != groceryItemModel.id).toList();
     var url = Uri.https(
         'shopping-list-app-flutte-f2675-default-rtdb.firebaseio.com',
         'shopping-list/${groceryItemModel.id}.json');
     final response = await http.delete(url);
 
     if (response.statusCode >= 400) {
-      state = [...state, groceryItemModel];
-    } else {
-      state =
-          state.where((grocery) => grocery.id != groceryItemModel.id).toList();
+      state.insert(index, groceryItemModel);
+      state = [...state];
     }
   }
 

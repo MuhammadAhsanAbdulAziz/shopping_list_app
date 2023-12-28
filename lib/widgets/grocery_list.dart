@@ -51,8 +51,9 @@ class _GroceryListState extends ConsumerState<GroceryList> {
               color: Theme.of(context).colorScheme.error,
               margin: Theme.of(context).cardTheme.margin,
             ),
-            key: ValueKey(groceryList[index]),
+            key: ValueKey(groceryList[index].id),
             onDismissed: (direction) {
+              
               ref
                   .read(groceryProvider.notifier)
                   .deleteData(groceryList[index]);
