@@ -43,7 +43,6 @@ class _NewItemState extends ConsumerState<NewItem> {
           },
         ),
       );
-      print(response.body);
       if (response.statusCode == 200) {
         ref.read(groceryProvider.notifier).loadData();
       }

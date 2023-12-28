@@ -55,7 +55,7 @@ class _GroceryListState extends ConsumerState<GroceryList> {
             onDismissed: (direction) {
               ref
                   .read(groceryProvider.notifier)
-                  .removeGrocery(groceryList[index]);
+                  .deleteData(groceryList[index]);
             },
             child: GroceryListItem(
               groceryItemModel: groceryList[index],

@@ -20,6 +20,20 @@ class GroceryNotifier extends StateNotifier<List<GroceryItemModel>> {
         state.where((grocery) => grocery.id != groceryItemModel.id).toList();
   }
 
+  void deleteData(GroceryItemModel groceryItemModel) async {
+    var url = Uri.https(
+        'shopping-list-app-flutte-f2675-default-rtdb.firebaseio.com',
+        'shopping-list/${groceryItemModel.id}.json');
+    final response = await http.delete(url);
+
+    if (response.statusCode >= 400) {
+      state = [...state, groceryItemModel];
+    } else {
+      state =
+          state.where((grocery) => grocery.id != groceryItemModel.id).toList();
+    }
+  }
+
   void loadData() async {
     var url = Uri.https(
         'shopping-list-app-flutte-f2675-default-rtdb.firebaseio.com',
@@ -31,7 +45,6 @@ class GroceryNotifier extends StateNotifier<List<GroceryItemModel>> {
       final response = await http.get(url);
       Map<String, dynamic> listData = {};
       if (response.body != "null") {
-        print(response.statusCode);
         listData = json.decode(response.body);
         for (final item in listData.entries) {
           final category = categories.entries
@@ -50,7 +63,7 @@ class GroceryNotifier extends StateNotifier<List<GroceryItemModel>> {
           }
         }
       }
-    } catch (e){
+    } catch (e) {
       error = "Error fetching results. Try again later";
     } finally {
       // Set the loading state to false in a finally block to ensure it happens even if there's an exception
